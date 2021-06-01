@@ -34,7 +34,7 @@ from pycoral.utils.edgetpu import run_inference
 import time
 
 def main():
-    default_model_dir = '../all_models'
+    default_model_dir = '~/coral/examples-camera/all_models'
     default_model = 'mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite'
     default_labels = 'coco_labels.txt'
     parser = argparse.ArgumentParser()
