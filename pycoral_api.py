@@ -1,3 +1,5 @@
+#/usr/bin/python3
+
 import os
 import pathlib
 from pycoral.utils import edgetpu
