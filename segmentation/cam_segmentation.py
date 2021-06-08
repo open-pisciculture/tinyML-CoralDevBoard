@@ -88,7 +88,7 @@ def main():
                       help='Path of the segmentation model.')
   parser.add_argument('--input', required=False,
                       help='File path of the input image.')
-  parser.add_argument('--output', default='semantic_segmentation_result.jpg',
+  parser.add_argument('--output', default="${HOME}/semantic_segmentation_result.jpg",
                       help='File path of the output image.')
   parser.add_argument(
       '--keep_aspect_ratio',
@@ -110,7 +110,6 @@ def main():
   ################ Reading from USB Cam ################
   cap = cv2.VideoCapture(1) # For the moment we use index 1 for USB Cam
   while cap.isOpened():
-      t0 = time.time()
       ret, frame = cap.read()
       if not ret:
           break
@@ -119,6 +118,7 @@ def main():
       cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
 
 
+      t0 = time.time()
       # #  Start inference process ---> # #
 
       # img = Image.open(args.input) # Opening image from path
@@ -145,18 +145,19 @@ def main():
       output_img = Image.new('RGB', (2 * new_width, new_height))
       output_img.paste(resized_img, (0, 0))
       output_img.paste(mask_img, (width, 0))
-      # output_img.save(args.output)
       # print('Done. Results saved at', args.output) # For the moment we won't save the results
 
       # # <--- End inference process # #
+      t1 = time.time()
+
       cv2_im = cv2.cvtColor( np.array(output_img), cv2.COLOR_RGB2BGR ) # Converting to cv2 Image
 
-      t1 = time.time()
       cv2.putText(cv2_im, 'FPS:'+str(int(1/(t1-t0))), (100, 30), cv2.FONT_HERSHEY_PLAIN, 1, (255,255,255), 2)
       cv2.imshow('frame', cv2_im)
       if cv2.waitKey(1) & 0xFF == ord('q'):
           break
 
+  output_img.save(args.output)
   cap.release()
   cv2.destroyAllWindows()
 
